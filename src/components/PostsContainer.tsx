@@ -1,23 +1,11 @@
-import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
-import type { Post } from '../types/Post';
-import { BASE_URL } from '../config';
-
+import { usePosts } from '../hooks/usePosts';
 
 const PostsContainer = () => {
-  // isolar camada de axios / react query Lucas
-  const fetchPosts = async (): Promise<Post[]> => {
-    const response = await axios.get<Post[]>(
-      `${BASE_URL}/posts`
-    );
-    return response.data;
-  };
+  const { data, isLoading, error, refetch } = usePosts();
 
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['posts'],
-    queryFn: fetchPosts,
-  });
+  console.log('PostsContainer data:', data);
 
+  // criar componentes padrão para caso de erro e de loading
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error message: {error.message}</p>;
 
